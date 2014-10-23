@@ -23,10 +23,12 @@ foreach ($allFiles as $file) {
 	if ($file == "." || $file == "..")
 		continue;
 
-	if (is_dir($path . "/" . $file))
-		$directories[] = $file;
-	else
-		$files[] = $file;
+	if (is_dir($path . "/" . $file)) {
+		$contents = scandir($path . "/" . $file);
+		$directories[$file] = count($contents) - 2;
+	} else {
+		$files[$file] = filesize($path . "/" . $file);
+	}
 }
 ?>
 
@@ -40,8 +42,8 @@ foreach ($allFiles as $file) {
 Directories:
 <ul id="directories">
 <?php
-foreach ($directories as $directory) {
-	echo("<li>$directory</li>");
+foreach ($directories as $directory => $items) {
+	echo("<li>$directory ($items items)</li>");
 }
 ?>
 </ul>
@@ -49,8 +51,8 @@ foreach ($directories as $directory) {
 Files:
 <ul id="files">
 <?php
-foreach ($files as $file) {
-	echo("<li>$file</li>");
+foreach ($files as $file => $size) {
+	echo("<li>$file ($size bytes)</li>");
 }
 ?>
 </ul>
