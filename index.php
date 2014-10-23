@@ -54,12 +54,35 @@ foreach ($allFiles as $file) {
 		$files[$file] = filesize($path . "/" . $file);
 	}
 }
+
+$part = str_replace($workingDir, "", $path);
+if ($part == "") {
+	$headText = "home";
+	$shortpath = "";
+} else {
+	$cpath = "";
+	$link = "<a href=\"" . $_SERVER["PHP_SELF"] . "\">home</a>";
+	$parts = explode("/", $part);
+	$last = array_pop($parts);
+
+	foreach ($parts as $folder) {
+		if (!strlen($folder))
+			continue;
+
+		$cpath .= "/" . $folder;
+		$link .= " / <a href=\"?p=$cpath\">$folder</a>";
+	}
+
+	$link .= " / $last";
+	$headText = $link;
+	$shortpath = $part;
+}
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title>swds</title>
+	<title>swds - <?php echo($shortpath == "" ? $headText : $shortpath); ?></title>
 	<link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
 	<style type="text/css">
 	* {
@@ -181,31 +204,7 @@ foreach ($allFiles as $file) {
 </head>
 <body>
 	<div id="all">
-		<h1><?php
-		$part = str_replace($workingDir, "", $path);
-		if ($part == "") {
-			echo("home");
-			$shortpath = "";
-		} else {
-			$cpath = "";
-			$link = "<a href=\"" . $_SERVER["PHP_SELF"] . "\">home</a>";
-			$parts = explode("/", $part);
-			$last = array_pop($parts);
-
-			foreach ($parts as $folder) {
-				if (!strlen($folder))
-					continue;
-
-				$cpath .= "/" . $folder;
-				$link .= " / <a href=\"?p=$cpath\">$folder</a>";
-			}
-
-			$link .= " / $last";
-			
-			echo($link);
-			$shortpath = $part;
-		}
-		?></h1>
+		<h1><?php echo($headText); ?></h1>
 
 		
 		<?php
@@ -230,11 +229,11 @@ foreach ($allFiles as $file) {
 					else
 						$classes = "folder";
 
-					if ($items > 1)
+					if ($items != 1)
 						$s = "s";
 					else
 						$s = "";
-					
+
 					echo("
 						<li class=\"$classes\">
 							<a href=\"?p=$shortpath/$directory\">
