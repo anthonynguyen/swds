@@ -130,20 +130,25 @@ foreach ($allFiles as $file) {
 		<h1><?php
 		$part = str_replace($workingDir, "", $path);
 		if ($part == "") {
-			echo("/");
+			echo("home");
 			$shortpath = "";
 		} else {
+			$cpath = "";
+			$link = "<a href=\"/\">home</a>";
 			$parts = explode("/", $part);
-			array_pop($parts);
-			$upLink = implode("/", $parts);
+			$last = array_pop($parts);
 
-			if ($upLink == "")
-				$upLink = ".";
-			else
-				$upLink = "?p=" . $upLink;
+			foreach ($parts as $folder) {
+				if (!strlen($folder))
+					continue;
 
-			echo("<a href=\"$upLink\">&uarr;</a> ");
-			echo($part);
+				$cpath .= "/" . $folder;
+				$link .= " / <a href=\"?p=$cpath\">$folder</a>";
+			}
+
+			$link .= " / $last";
+			
+			echo($link);
 			$shortpath = $part;
 		}
 		?></h1>
