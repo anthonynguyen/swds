@@ -83,6 +83,7 @@ if ($part == "") {
 <html>
 <head>
 	<title>swds - <?php echo($shortpath == "" ? $headText : $shortpath); ?></title>
+	<link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAQElEQVQ4y2NgGPKAkYGBgeGMpuZ/bJIm168zEmvAbwYGBhZSbIYZzgTl/yfXC0yUhsGoAYio+0ViTPxnGAVwAAAFSQwKSo3zhwAAAABJRU5ErkJggg==" />
 	<link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
 	<style type="text/css">
 	* {
@@ -205,8 +206,6 @@ if ($part == "") {
 <body>
 	<div id="all">
 		<h1><?php echo($headText); ?></h1>
-
-		
 		<?php
 		if ($lockedOut) {
 			echo("<h2>Please enter the password for this folder</h2>");
