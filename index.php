@@ -63,12 +63,12 @@ foreach ($allFiles as $file) {
 	}
 
 	h1 a {
-		color: inherit;
-		text-decoration: none;
+		color: #888;
+		text-decoration: underline;
 	}
 
 	h1 a:hover {
-		text-decoration: underline;
+		color: inherit;
 	}
 
 	ul {
@@ -93,7 +93,7 @@ foreach ($allFiles as $file) {
 		margin: 0.5em;
 		padding: 1em 1em 1em 9em;
 		text-decoration: none;
-		transition: 0.2s all;
+		transition: 0.4s all;
 		width: 18em;
 		word-wrap: break-word;
 	}
@@ -122,6 +122,12 @@ foreach ($allFiles as $file) {
 		font-size: 0.8em;
 		font-weight: 400;
 		margin-top: 0.2em;
+	}
+
+	h2 {
+		font-size: 2.4em;
+		margin-top: 2em;
+		text-align: center;
 	}
 	</style>
 </head>
@@ -153,27 +159,34 @@ foreach ($allFiles as $file) {
 		}
 		?></h1>
 
-		<ul>
+		
 		<?php
-		foreach ($directories as $directory => $items) {
-			echo("
-				<li class=\"folder\">
-					<a href=\"?p=$shortpath/$directory\">
-						$directory <span>$items items</span>
-					</a>
-				</li>"
-			);
-		}
+		if (count($directories) + count($files)) {
+			echo("<ul>");
+			foreach ($directories as $directory => $items) {
+				echo("
+					<li class=\"folder\">
+						<a href=\"?p=$shortpath/$directory\">
+							$directory <span>$items items</span>
+						</a>
+					</li>"
+				);
+			}
 
-		foreach ($files as $file => $size) {
-			echo("
-				<li class=\"file\">
-					<a href=\"$shortpath/$file\" download>
-						$file <span>$size bytes</span>
-					</a>
-				</li>"
-			);
+			foreach ($files as $file => $size) {
+				echo("
+					<li class=\"file\">
+						<a href=\"$shortpath/$file\" download>
+							$file <span>$size bytes</span>
+						</a>
+					</li>"
+				);
+			}
+			echo("</ul>");
+		} else {
+			echo("<h2>Folder is empty! :(</h2>");
 		}
+		
 		?>
 		</ul>
 	</div>
