@@ -126,8 +126,18 @@ foreach ($allFiles as $file) {
 		$part = str_replace($workingDir, "", $path);
 		if ($part == "") {
 			echo("/");
-			$shortpath = ".";
+			$shortpath = "";
 		} else {
+			$parts = explode("/", $part);
+			array_pop($parts);
+			$upLink = implode("/", $parts);
+
+			if ($upLink == "")
+				$upLink = ".";
+			else
+				$upLink = "?p=" . $upLink;
+
+			echo("<a href=\"$upLink\">&uarr;</a> ");
 			echo($part);
 			$shortpath = $part;
 		}
@@ -138,7 +148,7 @@ foreach ($allFiles as $file) {
 		foreach ($directories as $directory => $items) {
 			echo("
 				<li class=\"folder\">
-					<a href=\"?p=$directory\">
+					<a href=\"?p=$shortpath/$directory\">
 						$directory <span>$items items</span>
 					</a>
 				</li>"
@@ -148,7 +158,7 @@ foreach ($allFiles as $file) {
 		foreach ($files as $file => $size) {
 			echo("
 				<li class=\"file\">
-					<a href=\"$shortpath/$file\">
+					<a href=\"$shortpath/$file\" download>
 						$file <span>$size bytes</span>
 					</a>
 				</li>"
