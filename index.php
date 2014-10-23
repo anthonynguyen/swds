@@ -5,8 +5,8 @@ if (isset($_GET["p"]))
 	$path .= "/" . $_GET["p"];
 
 $tryPassword = "";
-if (isset($_GET["password"]))
-	$tryPassword = $_GET["password"];
+if (isset($_POST["password"]))
+	$tryPassword = $_POST["password"];
 
 $path = realpath($path);
 if (strpos($path, $workingDir) != 0 || strpos($path, $workingDir) === FALSE)
@@ -16,7 +16,7 @@ $allFiles = scandir($path);
 $directories = array();
 $files = array();
 
-$lockedOut = False;
+$lockedOut = 0;
 foreach ($allFiles as $file) {
 	if (realpath($path) == $workingDir && $file == basename(__FILE__))
 		continue;
@@ -30,8 +30,11 @@ foreach ($allFiles as $file) {
 	} else {
 		if (strpos($file, ".swds_password_") === 0) {
 			$password = substr($file, 15);
-			if ($tryPassword != $password) {
-				$lockedOut = True;
+			if ($tryPassword == "") {
+				$lockedOut = 1;
+				break;
+			} else if ($tryPassword != $password) {
+				$lockedOut = 2;
 				break;
 			}
 
@@ -60,6 +63,7 @@ foreach ($allFiles as $file) {
 		color: #f0f0f0;
 		font-family: "Lato", sans-serif;
 		font-size: 12pt;
+		text-align: center;
 	}
 
 	#all {
@@ -71,6 +75,7 @@ foreach ($allFiles as $file) {
 	h1 {
 		font-size: 3em;
 		margin-bottom: 0.25em;
+		text-align: left;
 	}
 
 	h1 a {
@@ -111,7 +116,7 @@ foreach ($allFiles as $file) {
 	}
 
 	li a:hover {
-		background: rgba(255, 255, 255, 0.1);
+		background: #2D3240;
 	}
 
 	li.file a {
@@ -139,7 +144,20 @@ foreach ($allFiles as $file) {
 	h2 {
 		font-size: 2.4em;
 		margin-top: 2em;
-		text-align: center;
+	}
+
+	input[type=password] {
+		background: #2D3240;
+		border: 0;
+		color: #f0f0f0;
+		margin: 1em 0;
+		padding: 1em;
+		width: 20em;
+	}
+
+	h3 {
+		color: #E67373;
+		font-size: 1em;
 	}
 	</style>
 </head>
@@ -152,7 +170,7 @@ foreach ($allFiles as $file) {
 			$shortpath = "";
 		} else {
 			$cpath = "";
-			$link = "<a href=\"/\">home</a>";
+			$link = "<a href=\"" . $_SERVER["PHP_SELF"] . "\">home</a>";
 			$parts = explode("/", $part);
 			$last = array_pop($parts);
 
@@ -174,7 +192,14 @@ foreach ($allFiles as $file) {
 		
 		<?php
 		if ($lockedOut) {
-			echo("<h2>You do not have access to view this folder.</h2>");
+			echo("<h2>Please enter the password for this folder</h2>");
+			echo("
+				<form action=\"\" method=\"post\">
+					<input name=\"password\" placeholder=\"Password\" type=\"password\" autofocus />
+				</form>
+			");
+			if ($lockedOut == 2)
+				echo("<h3>Incorrect password</h3>");
 		} else {
 			if (count($directories) + count($files) > 0) {
 				echo("<ul>");
