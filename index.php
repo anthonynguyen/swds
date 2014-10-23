@@ -9,7 +9,7 @@ if (isset($_GET["p"])) {
 $path = realpath($path);
 
 if (strpos($path, $workingDir) != 0 || strpos($path, $workingDir) === FALSE)
-	$path = ".";
+	$path = realpath(".");
 
 $allFiles = scandir($path);
 
