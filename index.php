@@ -1,21 +1,22 @@
 <?php
 $path = ".";
 $workingDir = dirname(__FILE__);
-
-if (isset($_GET["p"])) {
+if (isset($_GET["p"]))
 	$path .= "/" . $_GET["p"];
-}
+
+$tryPassword = "";
+if (isset($_GET["password"]))
+	$tryPassword = $_GET["password"];
 
 $path = realpath($path);
-
 if (strpos($path, $workingDir) != 0 || strpos($path, $workingDir) === FALSE)
 	$path = realpath(".");
 
 $allFiles = scandir($path);
-
 $directories = array();
 $files = array();
 
+$lockedOut = False;
 foreach ($allFiles as $file) {
 	if (realpath($path) == $workingDir && $file == basename(__FILE__))
 		continue;
@@ -27,6 +28,16 @@ foreach ($allFiles as $file) {
 		$contents = scandir($path . "/" . $file);
 		$directories[$file] = count($contents) - 2;
 	} else {
+		if (strpos($file, ".swds_password_") === 0) {
+			$password = substr($file, 15);
+			if ($tryPassword != $password) {
+				$lockedOut = True;
+				break;
+			}
+
+			continue;
+		}
+		
 		$files[$file] = filesize($path . "/" . $file);
 	}
 }
@@ -91,7 +102,7 @@ foreach ($allFiles as $file) {
 		font-weight: 700;
 		height: 7em;
 		margin: 0.5em;
-		padding: 1em 1em 1em 9em;
+		padding: 1em 1em 1em 7em;
 		text-decoration: none;
 		transition: 0.4s all;
 		width: 18em;
@@ -161,32 +172,35 @@ foreach ($allFiles as $file) {
 
 		
 		<?php
-		if (count($directories) + count($files)) {
-			echo("<ul>");
-			foreach ($directories as $directory => $items) {
-				echo("
-					<li class=\"folder\">
-						<a href=\"?p=$shortpath/$directory\">
-							$directory <span>$items items</span>
-						</a>
-					</li>"
-				);
-			}
-
-			foreach ($files as $file => $size) {
-				echo("
-					<li class=\"file\">
-						<a href=\"$shortpath/$file\" download>
-							$file <span>$size bytes</span>
-						</a>
-					</li>"
-				);
-			}
-			echo("</ul>");
+		if ($lockedOut) {
+			echo("<h2>You do not have access to view this folder.</h2>");
 		} else {
-			echo("<h2>Folder is empty! :(</h2>");
+			if (count($directories) + count($files) > 0) {
+				echo("<ul>");
+				foreach ($directories as $directory => $items) {
+					echo("
+						<li class=\"folder\">
+							<a href=\"?p=$shortpath/$directory\">
+								$directory <span>$items items</span>
+							</a>
+						</li>"
+					);
+				}
+
+				foreach ($files as $file => $size) {
+					echo("
+						<li class=\"file\">
+							<a href=\"$shortpath/$file\" download>
+								$file <span>$size bytes</span>
+							</a>
+						</li>"
+					);
+				}
+				echo("</ul>");
+			} else {
+				echo("<h2>Folder is empty! :(</h2>");
+			}
 		}
-		
 		?>
 		</ul>
 	</div>
