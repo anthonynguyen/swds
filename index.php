@@ -93,7 +93,7 @@ foreach ($allFiles as $file) {
 		margin: 0.5em;
 		padding: 1em 1em 1em 9em;
 		text-decoration: none;
-		width: 20em;
+		width: 18em;
 		word-wrap: break-word;
 	}
 
