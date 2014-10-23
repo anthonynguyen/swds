@@ -128,6 +128,7 @@ if ($part == "") {
 	li {
 		display: inline-block;
 		float: left;
+		text-align: left;
 	}
 
 	li a {
