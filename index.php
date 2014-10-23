@@ -38,21 +38,37 @@ foreach ($allFiles as $file) {
 <title>swds</title>
 </head>
 <body>
-
-Directories:
-<ul id="directories">
-<?php
-foreach ($directories as $directory => $items) {
-	echo("<li>$directory ($items items)</li>");
+<h1><?php
+$part = str_replace($workingDir, "", $path);
+if ($part == "") {
+	echo("/");
+	$shortpath = ".";
+} else {
+	echo($part);
+	$shortpath = $part;
 }
-?>
-</ul>
+?></h1>
 
-Files:
 <ul id="files">
 <?php
+foreach ($directories as $directory => $items) {
+	echo("
+		<li>
+			<a class=\"dir\" href=\"?p=$directory\">
+				$directory <span>$items items</span>
+			</a>
+		</li>"
+	);
+}
+
 foreach ($files as $file => $size) {
-	echo("<li>$file ($size bytes)</li>");
+	echo("
+		<li>
+			<a class=\"dir\" href=\"$shortpath/$file\">
+				$file <span>$size bytes</span>
+			</a>
+		</li>"
+	);
 }
 ?>
 </ul>
