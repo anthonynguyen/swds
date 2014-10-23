@@ -54,7 +54,7 @@ foreach ($allFiles as $file) {
 	#all {
 		margin: 0 auto;
 		margin-top: 5%;
-		width: 85%;
+		width: 80%;
 	}
 
 	h1 {
@@ -81,8 +81,8 @@ foreach ($allFiles as $file) {
 	}
 
 	li a {
-		background: rgba(255, 255, 255, 0.07);
-		border-radius: 0.4em;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 0.2em;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
@@ -93,8 +93,13 @@ foreach ($allFiles as $file) {
 		margin: 0.5em;
 		padding: 1em 1em 1em 9em;
 		text-decoration: none;
+		transition: 0.2s all;
 		width: 18em;
 		word-wrap: break-word;
+	}
+
+	li a:hover {
+		background: rgba(255, 255, 255, 0.1);
 	}
 
 	li.file a {
