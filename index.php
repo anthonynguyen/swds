@@ -26,14 +26,17 @@ foreach ($allFiles as $file) {
 
 	if (is_dir($path . "/" . $file)) {
 		$contents = scandir($path . "/" . $file);
+		$numFiles = count($contents) - 2;
 
 		$locked = False;
 		foreach ($contents as $content) {
-			if (strpos($content, ".swds_password_") === 0)
+			if (strpos($content, ".swds_password_") === 0) {
 				$locked = True;
+				$numFiles--;
+			}
 		}
 
-		$directories[$file] = array(count($contents) - 2, $locked);
+		$directories[$file] = array($numFiles, $locked);
 	} else {
 		if (strpos($file, ".swds_password_") === 0) {
 			$password = substr($file, 15);
@@ -227,10 +230,15 @@ foreach ($allFiles as $file) {
 					else
 						$classes = "folder";
 
+					if ($items > 1)
+						$s = "s";
+					else
+						$s = "";
+					
 					echo("
 						<li class=\"$classes\">
 							<a href=\"?p=$shortpath/$directory\">
-								$directory <span>$items items</span>
+								$directory <span>$items item$s</span>
 							</a>
 						</li>"
 					);
